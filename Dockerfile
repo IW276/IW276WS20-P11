@@ -8,25 +8,35 @@ COPY  jetson-ota-public.asc /etc/apt/trusted.gpg.d/jetson-ota-public.asc
 
 #Install all dependencies of the project
 RUN apt-get update && \
-        apt-get install -y git && \
+        apt-get install -y \
+                build-essential \
+                libssl-dev \
+                libffi-dev \
+                python-dev \
+                git \
+                python3-matplotlib \
+                libopencv-python && \
         pip3 install -U \
                 pip \
                 setuptools \
                 wheel \
                 tqdm \
                 cython \
-                pycocotools
-#       apt-get install python3-matplotlib &&
+                pycocotools \
+                traitlets \
+                ipywidgets
+
 #RUN rm -rf ~/.cache/pip
 
 WORKDIR /Autonome_Systeme_Labor
 
 RUN git clone https://github.com/NVIDIA-AI-IOT/trt_pose
-RUN cd trt_pose && python3 setup.py install && cd ..
+RUN cd trt_pose && python3 setup.py install
+
+RUN git clone https://github.com/NVIDIA-AI-IOT/jetcam.git
+RUN cd jetcam && python3 setup.py install
+
+RUN git clone https://github.com/NVIDIA-AI-IOT/torch2trt
+RUN cd torch2trt && python3 setup.py install
+
 RUN git clone https://github.com/IW276/IW276WS20-P11.git
-
-
-#WORKDIR tasks/human_pose
-
-#COPY densenet121_baseline_att_256x256_B_epoch_160.pth .
-#COPY resnet18_baseline_att_224x224_A_epoch_249.pth .

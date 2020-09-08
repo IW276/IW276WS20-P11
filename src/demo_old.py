@@ -18,19 +18,24 @@ from IPython.display import display
 #import argparse
 import os.path
 
+#DIR_DATASETS = '../datasets/'
+#DIR_PRETRAINED_MODELS = '../pretrained-models/'
+#PATH_TO_JSON = '../datasets/human_pose.json'
 DIR_DATASETS = '../datasets/'
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
-PATH_TO_JSON = DIR_DATASETS + 'human_pose.json'
 
-#PATH_TO_DENSENET_MODEL = DIR_PRETRAINED_MODELS + 'densenet121_baseline_att 256x256_B_epoch_160.pth'
-PATH_TO_RESNET_MODEL = DIR_PRETRAINED_MODELS + 'resnet18_baseline_att_224x224_A_epoch_249.pth'
-PATH_TO_OPTIMIZED_MODEL = PATH_TO_RESNET_MODEL
+DATASET = 'human_pose.json'
+
+MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
+OPTIMIZED_MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
+
 
 WIDTH = 224
 HEIGHT = 224
 
 
-with open('PATH_TO_JSON', 'r') as f:
+#with open('PATH_TO_JSON', 'r') as f:
+with open(DIR_DATASETS + DATASET, 'r') as f:
     human_pose = json.load(f)
 
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
@@ -40,7 +45,7 @@ num_links = len(human_pose['skeleton'])
 
 model = trt_pose.models.resnet18_baseline_att(num_parts, 2 * num_links).cuda().eval()
 
-model.load_state_dict(torch.load(PATH_TO_RESNET_MODEL))
+model.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + MODEL_RESNET18))
 
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 
@@ -48,7 +53,7 @@ data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 #model_trt = torch2trt.torch2trt(model, [data], fp16_mode=True, max_workspace_size=1<<25)
 
 model_trt = TRTModule()
-model_trt.load_state_dict(torch.load(PATH_TO_OPTIMIZED_MODEL))
+model_trt.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18))
 
 t0 = time.time()
 torch.cuda.current_stream().synchronize()
