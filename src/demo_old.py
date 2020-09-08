@@ -18,23 +18,17 @@ from IPython.display import display
 #import argparse
 import os.path
 
-#DIR_DATASETS = '../datasets/'
-#DIR_PRETRAINED_MODELS = '../pretrained-models/'
-#PATH_TO_JSON = '../datasets/human_pose.json'
 DIR_DATASETS = '../datasets/'
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
 
 DATASET = 'human_pose.json'
 
 MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
-OPTIMIZED_MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
-
+OPTIMIZED_MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
 
 WIDTH = 224
 HEIGHT = 224
 
-
-#with open('PATH_TO_JSON', 'r') as f:
 with open(DIR_DATASETS + DATASET, 'r') as f:
     human_pose = json.load(f)
 
@@ -50,7 +44,8 @@ model.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + MODEL_RESNET18))
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 
 
-#model_trt = torch2trt.torch2trt(model, [data], fp16_mode=True, max_workspace_size=1<<25)
+model_trt = torch2trt.torch2trt(model, [data], fp16_mode=True, max_workspace_size=1<<25)
+torch.save(model_trt.state_dict(), OPTIMIZED_MODEL_RESNET18)
 
 model_trt = TRTModule()
 model_trt.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18))
