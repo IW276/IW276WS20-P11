@@ -46,9 +46,8 @@ def get_keypoint(humans, hnum, peaks):
     return kpoint
 
 parser = argparse.ArgumentParser(description='TensorRT pose estimation run')
-parser.add_argument('--video', type=str, default='video.avi')
-parser.add_argument('--model', type=str, default='resnet', help = 'resnet or densenet' )
-parser.add_argument('--path',type=str,default='/home/p1/Downloads/')
+parser.add_argument('--video', type=str, default='video.mp4')
+parser.add_argument('--path',type=str,default='/videos/')
 args = parser.parse_args()
 
 with open(DIR_DATASETS + DATASET, 'r') as f:
