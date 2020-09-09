@@ -10,13 +10,9 @@ import torchvision.transforms as transforms
 import PIL.Image
 from trt_pose.draw_objects import DrawObjects
 from trt_pose.parse_objects import ParseObjects
-from jetcam.usb_camera import USBCamera
-# from jetcam.csi_camera import CSICamera
-from jetcam.utils import bgr8_to_jpeg
-import ipywidgets
-from IPython.display import display
-#import argparse
-import os.path
+
+import argparse
+
 
 DIR_DATASETS = '../datasets/'
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
@@ -28,6 +24,32 @@ OPTIMIZED_MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
 
 WIDTH = 224
 HEIGHT = 224
+
+'''
+hnum: 0 based human index
+kpoint : keypoints (float type range : 0.0 ~ 1.0 ==> later multiply by image width, height
+'''
+def get_keypoint(humans, hnum, peaks):
+    #check invalid human index
+    kpoint = []
+    human = humans[0][hnum]
+    C = human.shape[0]
+    for j in range(C):
+        k = int(human[j])
+        if k >= 0:
+            peak = peaks[0][j][k]   # peak[1]:width, peak[0]:height
+            peak = (j, float(peak[0]), float(peak[1]))
+            kpoint.append(peak)
+        else:
+            peak = (j, None, None)
+            kpoint.append(peak)
+    return kpoint
+
+parser = argparse.ArgumentParser(description='TensorRT pose estimation run')
+parser.add_argument('--video', type=str, default='video.avi')
+parser.add_argument('--model', type=str, default='resnet', help = 'resnet or densenet' )
+parser.add_argument('--path',type=str,default='/home/p1/Downloads/')
+args = parser.parse_args()
 
 with open(DIR_DATASETS + DATASET, 'r') as f:
     human_pose = json.load(f)
@@ -72,31 +94,48 @@ def preprocess(image):
     image.sub_(mean[:, None, None]).div_(std[:, None, None])
     return image[None, ...]
 
-parse_objects = ParseObjects(topology)
-draw_objects = DrawObjects(topology)
+cap = cv2.VideoCapture(args.path+args.video)
 
-camera = USBCamera(width=WIDTH, height=HEIGHT, capture_fps=30)
-# camera = CSICamera(width=WIDTH, height=HEIGHT, capture_fps=30)
+fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+out_video = cv2.VideoWriter(args.path+'output.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), (int(cap.get(3)),int(cap.get(4))))
+X_compress = int(cap.get(3)) / WIDTH * 1.0
+Y_compress = int(cap.get(4)) / HEIGHT * 1.0
 
-camera.running = True
 
-image_w = ipywidgets.Image(format='jpeg')
 
-display(image_w)
-
-def execute(change):
-    image = change['new']
-    data = preprocess(image)
+def execute(img, src, t , out_video):
+    data = preprocess(img)
     cmap, paf = model_trt(data)
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
-    draw_objects(image, counts, objects, peaks)
-    image_w.value = bgr8_to_jpeg(image[:, ::-1, :])
+    fps = 1.0 / (time.time() - t)
+    print("FPS:%f "%(fps))
+    draw_objects(src, counts, objects, peaks)
+    cv2.putText(src , "FPS: %f" % (fps), (20, 30),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+    out_video.write(src)
 
 
-#execute({'new': camera.value})
+count = 0
 
-camera.observe(execute, names='value')
+parse_objects = ParseObjects(topology)
+draw_objects = DrawObjects(topology)
 
-#camera.unobserve_all()
+while (cap.isOpened()):
+    t = time.time()
+    ret, frame = cap.read()
+
+    if ret == False:
+        print("Video load Error.")
+        break
+
+    img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
+
+    if cv2.waitKey(25) & 0xFF == ord('q'):
+        break
+
+    execute(img, frame, t, out_video)
+
+cv2.destroyAllWindows()
+out_video.release()
+cap.release()
 
