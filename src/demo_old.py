@@ -44,15 +44,15 @@ def preprocess(image):
 
 def initialize_video_writer():
     print('initialize video capture')
-    cap = cv2.VideoCapture(args.path + args.video)
+    capture = cv2.VideoCapture(args.path + args.video)
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-    frame_width = int(cap.get(3))
-    frame_height = int(cap.get(4))
+    frame_width = int(capture.get(3))
+    frame_height = int(capture.get(4))
     frame_size = (frame_width, frame_height)
     print('initialize video writer')
-    out_video = cv2.VideoWriter(args.video_path + 'output.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), frame_size)
+    out_vid = cv2.VideoWriter(args.path + 'output.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
 
-    return cap, out_video
+    return cap, out_vid
 
 def clean_up():
     cv2.destroyAllWindows()
