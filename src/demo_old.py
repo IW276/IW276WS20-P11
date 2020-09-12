@@ -47,7 +47,7 @@ def get_keypoint(humans, hnum, peaks):
 
 parser = argparse.ArgumentParser(description='TensorRT pose estimation run')
 parser.add_argument('--video', type=str, default='video.mp4')
-parser.add_argument('--path',type=str,default='/videos/')
+parser.add_argument('--path', type=str, default='/videos/')
 args = parser.parse_args()
 
 with open(DIR_DATASETS + DATASET, 'r') as f:
@@ -64,9 +64,10 @@ model.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + MODEL_RESNET18))
 
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 
-
 model_trt = torch2trt.torch2trt(model, [data], fp16_mode=True, max_workspace_size=1<<25)
 torch.save(model_trt.state_dict(), DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18)
+
+print('Model optimized')
 
 model_trt = TRTModule()
 model_trt.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18))
@@ -93,37 +94,42 @@ def preprocess(image):
     image.sub_(mean[:, None, None]).div_(std[:, None, None])
     return image[None, ...]
 
-cap = cv2.VideoCapture(args.path+args.video)
-
-fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-out_video = cv2.VideoWriter(args.path+'output.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), (int(cap.get(3)),int(cap.get(4))))
-X_compress = int(cap.get(3)) / WIDTH * 1.0
-Y_compress = int(cap.get(4)) / HEIGHT * 1.0
-
-
-
-def execute(img, src, t , out_video):
-    data = preprocess(img)
-    cmap, paf = model_trt(data)
-    cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
-    counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
-    fps = 1.0 / (time.time() - t)
-    print("FPS:%f "%(fps))
-    draw_objects(src, counts, objects, peaks)
-    cv2.putText(src , "FPS: %f" % (fps), (20, 30),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
-    out_video.write(src)
-
-
-count = 0
 
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
-while (cap.isOpened()):
+cap = cv2.VideoCapture(args.path+args.video)
+
+print('Video captured')
+
+fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+out_video = cv2.VideoWriter(args.path+'output.mp4', fourcc, cap.get(cv2.CAP_PROP_FPS), (int(cap.get(3)), int(cap.get(4))))
+X_compress = int(cap.get(3)) / WIDTH * 1.0
+Y_compress = int(cap.get(4)) / HEIGHT * 1.0
+
+print('out_video')
+
+
+def execute(image, src, tm, out_vid):
+    img_data = preprocess(image)
+    cmap, paf = model_trt(img_data)
+    cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
+    counts, objects, peaks = parse_objects(cmap, paf)#, cmap_threshold=0.15, link_threshold=0.15)
+    fps = 1.0 / (time.time() - tm)
+    print("FPS:%f " % fps)
+    draw_objects(src, counts, objects, peaks)
+    cv2.putText(src, "FPS: %f" % fps, (20, 30),  cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+    out_vid.write(src)
+
+
+count = 0
+
+
+while cap.isOpened():
     t = time.time()
     ret, frame = cap.read()
 
-    if ret == False:
+    if not ret:
         print("Video load Error.")
         break
 
@@ -133,8 +139,11 @@ while (cap.isOpened()):
         break
 
     execute(img, frame, t, out_video)
+    print('Started execution')
 
 cv2.destroyAllWindows()
+print('Windows destroyed')
 out_video.release()
 cap.release()
+print('all released')
 
