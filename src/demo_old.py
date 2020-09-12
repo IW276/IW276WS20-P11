@@ -52,7 +52,7 @@ def initialize_video_writer():
     print('initialize video writer')
     out_vid = cv2.VideoWriter(args.path + 'output.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
 
-    return cap, out_vid
+    return capture, out_vid
 
 def clean_up():
     cv2.destroyAllWindows()
