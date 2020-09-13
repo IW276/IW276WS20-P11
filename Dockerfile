@@ -5,6 +5,8 @@ RUN nvcc --version
 # needed for accessing jetpack.  This is for 4.4
 COPY  nvidia-l4t-apt-source.list /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
 COPY  jetson-ota-public.asc /etc/apt/trusted.gpg.d/jetson-ota-public.asc
+COPY videos /videos
+COPY requirements.txt requirements.txt
 
 #Install all dependencies of the project
 RUN apt-get update && \
@@ -15,19 +17,9 @@ RUN apt-get update && \
                 python-dev \
                 git \
                 python3-matplotlib \
-                libopencv-python && \
-        pip3 install -U \
-                pip \
-                setuptools \
-                wheel \
-                tqdm \
-                cython \
-                pycocotools \
-                traitlets \
-                ipywidgets
+                libopencv-python
 
-#RUN rm -rf ~/.cache/pip
-
+RUN pip3 install -r requirements.txt
 WORKDIR /Autonome_Systeme_Labor
 
 RUN git clone https://github.com/NVIDIA-AI-IOT/trt_pose
