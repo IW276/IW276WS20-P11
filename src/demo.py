@@ -31,6 +31,9 @@ parser.add_argument('--video', type=str, default='video.mp4')
 parser.add_argument('--path', type=str, default='/videos/')
 args = parser.parse_args()
 
+splited_video= args.video.split('.')
+video_name = splited_video[0]
+
 
 def preprocess(image):
     global device
@@ -50,7 +53,7 @@ def initialize_video_writer():
     frame_height = int(capture.get(4))
     frame_size = (frame_width, frame_height)
     print('initialize video writer')
-    out_vid = cv2.VideoWriter(args.path + 'output.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
+    out_vid = cv2.VideoWriter(args.path + video_name + '_demo.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
 
     return capture, out_vid
 

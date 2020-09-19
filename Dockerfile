@@ -24,9 +24,6 @@ WORKDIR /Autonome_Systeme_Labor
 RUN git clone https://github.com/NVIDIA-AI-IOT/trt_pose
 RUN cd trt_pose && python3 setup.py install
 
-RUN git clone https://github.com/NVIDIA-AI-IOT/jetcam.git
-RUN cd jetcam && python3 setup.py install
-
 RUN git clone https://github.com/NVIDIA-AI-IOT/torch2trt
 RUN cd torch2trt && python3 setup.py install
 
