@@ -5,7 +5,6 @@ RUN nvcc --version
 # needed for accessing jetpack.  This is for 4.4
 COPY  nvidia-l4t-apt-source.list /etc/apt/sources.list.d/nvidia-l4t-apt-source.list
 COPY  jetson-ota-public.asc /etc/apt/trusted.gpg.d/jetson-ota-public.asc
-COPY videos /videos
 COPY requirements.txt requirements.txt
 
 #Install all dependencies of the project
@@ -32,3 +31,4 @@ RUN git clone https://github.com/NVIDIA-AI-IOT/torch2trt
 RUN cd torch2trt && python3 setup.py install
 
 RUN git clone https://github.com/IW276/IW276WS20-P11.git
+RUN cd IW276WS20-P11/src && git pull origin master

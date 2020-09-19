@@ -1,7 +1,1 @@
-sudo docker run -d trt_pose_image sleep infinity
-
-sudo docker ps 
-
-sudo docker exec -it <CONTAINER_ID> /bin/bash
-
-sudo docker stop <CONTAINER_ID>
+sudo docker run --runtime nvidia -v ~/Documents/Autonome_Systeme_Labor/trt_pose_Docker/videos/:/videos/ trt_pose_image /bin/bash -c 'cd IW276WS20-P11/src && python3 demo_old.py --path /videos/ --video video.mp4'
