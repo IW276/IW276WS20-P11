@@ -18,7 +18,7 @@ from os import path
 DIR_DATASETS = '../datasets/'
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
 
-DATASET = 'human_pose.json'
+DATASET = 'human_pose_new.json'
 
 MODEL_RESNET18 = 'epoch2_2020-09-17_21.pth'
 OPTIMIZED_MODEL_RESNET18 = 'epoch2_2020-09-17_21_trt.pth'
