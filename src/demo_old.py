@@ -93,15 +93,6 @@ if not path.exists(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18):
 model_trt = TRTModule()
 model_trt.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18))
 
-#t0 = time.time()
-#torch.cuda.current_stream().synchronize()
-#for i in range(50):
-#    y = model_trt(data)
-#torch.cuda.current_stream().synchronize()
-#t1 = time.time()
-
-#print(50.0 / (t1 - t0))
-
 mean = torch.Tensor([0.485, 0.456, 0.406]).cuda()
 std = torch.Tensor([0.229, 0.224, 0.225]).cuda()
 device = torch.device('cuda')
