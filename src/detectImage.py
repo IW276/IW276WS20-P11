@@ -1,6 +1,6 @@
 import torch
 import json
-import coco
+import trt_pose.coco
 import trt_pose.models
 import PIL.Image
 import cv2
@@ -11,7 +11,7 @@ import ipywidgets
 from IPython.display import display
 
 DIR_DATASETS = '../datasets/'
-DATASET = 'human_pose_new.json'
+DATASET = 'resnet18CrowdPose.json'
 
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
 MODEL_RESNET18 = 'epoch2_2020-09-17_21.pth'
