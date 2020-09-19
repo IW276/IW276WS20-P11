@@ -99,9 +99,9 @@ draw_objects = DrawObjects(topology)
 # capture frames until user exits
 while output.IsStreaming():
     t = time.time()
-	img = input.Capture(format='rgb8')
-	output.Render(img)
-	output.SetStatus("Video Viewer | {:d}x{:d} | {:.1f} FPS".format(img.width, img.height, output.GetFrameRate()))
+    img = input.Capture(format='rgb8')
+    output.Render(img)
+    output.SetStatus("Video Viewer | {:d}x{:d} | {:.1f} FPS".format(img.width, img.height, output.GetFrameRate()))
     print('Started execution')
     execute(img, t)
 
