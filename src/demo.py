@@ -20,8 +20,8 @@ DIR_PRETRAINED_MODELS = '../pretrained-models/'
 
 DATASET = 'human_pose_new.json'
 
-MODEL_RESNET18 = 'epoch2_2020-09-17_21.pth'
-OPTIMIZED_MODEL_RESNET18 = 'epoch2_2020-09-17_21_trt.pth'
+MODEL_RESNET18 = 'epoch_132.pth'
+OPTIMIZED_MODEL_RESNET18 = 'epoch_132_trt.pth'
 
 WIDTH = 224
 HEIGHT = 224
