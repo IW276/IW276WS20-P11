@@ -63,6 +63,7 @@ def clean_up():
     cap.release()
     print('all released')
 
+
 def execute(image, src, tm, out_vid, counter):
     img_data = preprocess(image)
     cmap, paf = model_trt(img_data)
@@ -74,6 +75,25 @@ def execute(image, src, tm, out_vid, counter):
     cv2.putText(src, "FPS: %f" % fps, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
     out_vid.write(src)
 
+
+def process_frames(out_video, cap):
+    i = 1
+    t = time.time()
+
+    while cap.isOpened():
+        if i % 2 is not 0:
+            ret, frame = cap.read()
+
+            if not ret:
+                print("End of videofile.")
+                break
+
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                break
+
+            img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
+            execute(img, frame, t, out_video, i)
+        i += 1
 
 with open(DIR_DATASETS + DATASET, 'r') as f:
     human_pose = json.load(f)
@@ -104,25 +124,7 @@ parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
 cap, out_video = initialize_video_writer()
-
-i = 1
-t = time.time()
-
-while cap.isOpened():
-    if i%2 is not 0:
-        ret, frame = cap.read()
-
-        if not ret:
-            print("End of videofile.")
-            break
-
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            break
-
-        img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
-
-        execute(img, frame, t, out_video, i)
-    i += 1
+process_frames(out_video, cap)
 
 clean_up()
 print("Process finished")
