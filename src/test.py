@@ -29,8 +29,8 @@ WIDTH = 224
 HEIGHT = 224
 
 parser = argparse.ArgumentParser(description='TensorRT pose estimation run')
-parser.add_argument('--video', type=str, default='video.mp4')
-parser.add_argument('--path', type=str, default='/videos/')
+parser.add_argument('--video', type=str, default='video.mp4', help="URI of the input stream")
+parser.add_argument('--path', type=str, nargs='?', default='/videos/', help="URI of the output stream")
 #args = parser.parse_args()
 args = parser.parse_known_args()[0]
 
@@ -45,7 +45,7 @@ output = jetson.utils.videoOutput(args.path + video_name + '_demo_old.mp4', argv
 def preprocess(image):
     global device
     device = torch.device('cuda')
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    #image = cv2.cvtColor(image, )
     image = PIL.Image.fromarray(image)
     image = transforms.functional.to_tensor(image).to(device)
     image.sub_(mean[:, None, None]).div_(std[:, None, None])
@@ -59,7 +59,7 @@ def clean_up():
 
 def execute(image, tm):
     img_data = preprocess(image)
-    cmap, paf = model_trt(img_data)
+    cmap, paf = model_trt(image)
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)
     fps = 1.0 / (time.time() - tm)
@@ -96,6 +96,7 @@ device = torch.device('cuda')
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
+output.Open()
 # capture frames until user exits
 while output.IsStreaming():
     t = time.time()

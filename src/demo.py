@@ -18,10 +18,10 @@ from os import path
 DIR_DATASETS = '../datasets/'
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
 
-DATASET = 'human_pose_new.json'
+DATASET = 'human_pose.json'
 
-MODEL_RESNET18 = 'epoch_132.pth'
-OPTIMIZED_MODEL_RESNET18 = 'epoch_132_trt.pth'
+MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
+OPTIMIZED_MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
 
 WIDTH = 224
 HEIGHT = 224
@@ -63,12 +63,12 @@ def clean_up():
     cap.release()
     print('all released')
 
-def execute(image, src, tm, out_vid):
+def execute(image, src, tm, out_vid, counter):
     img_data = preprocess(image)
     cmap, paf = model_trt(img_data)
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)
-    fps = 1.0 / (time.time() - tm)
+    fps = counter / (time.time() - tm)
     print("FPS:%f " % fps)
     draw_objects(src, counts, objects, peaks)
     cv2.putText(src, "FPS: %f" % fps, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
@@ -105,21 +105,24 @@ draw_objects = DrawObjects(topology)
 
 cap, out_video = initialize_video_writer()
 
+i = 1
+t = time.time()
+
 while cap.isOpened():
-    t = time.time()
-    ret, frame = cap.read()
+    if i%2 is not 0:
+        ret, frame = cap.read()
 
-    if not ret:
-        print("Video load Error.")
-        break
+        if not ret:
+            print("End of videofile.")
+            break
 
-    img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            break
 
-    if cv2.waitKey(25) & 0xFF == ord('q'):
-        break
+        img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
 
-    execute(img, frame, t, out_video)
-    print('Started execution')
+        execute(img, frame, t, out_video, i)
+    i += 1
 
 clean_up()
 print("Process finished")
