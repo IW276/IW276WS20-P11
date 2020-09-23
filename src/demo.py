@@ -18,10 +18,10 @@ from os import path
 DIR_DATASETS = '../datasets/'
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
 
-DATASET = 'human_pose.json'
+DATASET = 'human_pose_new.json'
 
-MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
-OPTIMIZED_MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
+MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129.pth'
+OPTIMIZED_MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129_trt.pth'
 
 WIDTH = 224
 HEIGHT = 224
@@ -53,7 +53,7 @@ def initialize_video_writer():
     frame_height = int(capture.get(4) * 0.5)
     frame_size = (frame_width, frame_height)
     print('initialize video writer')
-    out_vid = cv2.VideoWriter(args.path + video_name + '_demo.mp4', fourcc, 25, frame_size)
+    out_vid = cv2.VideoWriter(args.path + MODEL_RESNET18 + '_' + video_name + '_demo.mp4', fourcc, 25, frame_size)
 
     return capture, out_vid, frame_size
 
@@ -73,7 +73,7 @@ def execute(image, src, tm, out_vid, counter):
     fps = counter / (time.time() - tm)
     print("FPS:%f " % fps)
     draw_objects(src, counts, objects, peaks)
-    cv2.putText(src, "FPS: %f" % fps, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+    cv2.putText(src, "FPS: %f" % fps, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
     out_vid.write(src)
 
 

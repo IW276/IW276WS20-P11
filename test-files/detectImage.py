@@ -14,8 +14,8 @@ DIR_DATASETS = '../datasets/'
 DATASET = 'resnet18CrowdPose.json'
 
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
-MODEL_RESNET18 = 'epoch2_2020-09-17_21.pth'
-OPTIMIZED_MODEL_RESNET18 = 'epoch2_2020-09-17_21_trt.pth'
+MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129.pth'
+OPTIMIZED_MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129_trt.pth'
 
 with open(DIR_DATASETS + DATASET, 'r') as f:
     human_pose = json.load(f)

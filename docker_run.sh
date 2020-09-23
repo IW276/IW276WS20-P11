@@ -1,1 +1,0 @@
-sudo docker run --runtime nvidia -v ~/Videos/:/videos/ P11_image /bin/bash -c 'cd IW276WS20-P11/src && python3 demo.py --path /videos/ --video video.mp4'

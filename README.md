@@ -7,7 +7,7 @@ Short introduction to project assigment.
   Link to Demo Video
 </p>
 
-> This work was done by Xiahong C., Nadine V. and Melanie W. during the IW276 Autonome Systeme Labor at the Karlsruhe University of Applied Sciences (Hochschule Karlruhe - Technik und Wirtschaft) in WS 2020 / 2021. 
+> This work was done by Xiahong C., Nadine V. and Melanie W. during the IW276 Autonome Systeme Labor at the Karlsruhe University of Applied Sciences (Hochschule Karlsruhe - Technik und Wirtschaft) in WS 2020 / 2021. 
 
 ## Table of Contents
 
@@ -23,12 +23,16 @@ Short introduction to project assigment.
 * OpenCV 4.1 (or above)
 * Jetson Nano
 * Jetpack 4.4
+* trt_pose
+* torch2trt
 
 ## Prerequisites
 You can either install the repository directly or install it via Docker (see point '[Docker](#Docker)').
-1. Install requirements:
+
+1. Install dependencies:
     ```
-    pip install -r requirements.txt
+    sudo apt-get update
+    sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev git python3-matplotlib libopencv-python
     ```
 2. Install trt_pose:
     ```
@@ -40,31 +44,67 @@ You can either install the repository directly or install it via Docker (see poi
     git clone https://github.com/NVIDIA-AI-IOT/torch2trt
     cd torch2trt && python3 setup.py install
     ```
-3. The demo can be found in ```src```.
+4. Clone IW276WS20-P11 project:
+    ```
+    git clone https://github.com/IW276/IW276WS20-P11.git
+    cd IW276WS20-P11 && pip3 install -r requirements.txt
+    ``` 
+5. Make sure you have some .mp4 video files in the ~/Videos folder on your system
+  > The demo works best with square videos.
 
+    
 ## Pre-trained models
 
 Pre-trained models are available at ```pretrained-models```.
-* ``epoch129.pth`` was trained using the CrowdPose dataset and is based on the resnet model.
+* ``resnet18_crowdpose_224x224_epoch_129.pth`` was trained using the CrowdPose dataset and is based on the resnet model.
 * ``resnet18_baseline_att_224x224_A_epoch_249.pth`` and ``densenet121_baseline_att_256x256_B_epoch_160.pth`` were pre-trained on the MSCOCO dataset (source: trt_pose).
 
 ## Running
-To run the demo, pass a video file name and the path in which the video can be found. The processed video will also be saved here:
-```
-python3 demo.py --video video.mp4 --path /videos/
-```
-> The demo works best with square videos.
 
-### Docker
+To run the demo, switch to the src folder and pass a video file name after --video and the absolute path of the directory in which the video can be found after --path. The processed video will also be saved here:
+```
+python3 demo.py --video <video.mp4> --path </videos/>
+```
+## Docker
+
+To run the demo in a Docker container, follow these steps:
+> We assume you have already installed Docker on your system.
+
 1. Build the docker container via ```docker_build.sh```. The container will be called ```P11_image```.
-2. Start the container, either via ```docker_run.sh``` or ```docker_run_interactive.sh```
-    * ```docker_run.sh``` will use a video called 'video.mp4' from your 'Videos' folder and run the demo automatically.
-    * ```docker_run_interactive.sh``` can be used to test your own videos.
+2. To start the demo directly in the container, use this command:
+    ```
+    sudo docker run --runtime nvidia -v ~/Videos/:/videos/ P11_image /bin/bash -c 'cd IW276WS20-P11/src && python3 demo.py --path /videos/ --video <video.mp4>'
+    ```
+   > Please replace the video file name in the command.
+                                                                                                                                                                                                                                                     >
+3. To start the Docker container with an interactive terminal, follow these steps:
+    * Start the Docker container via
+        ```
+        sudo docker run --runtime nvidia -d -v ~/Videos/:/videos/ P11_image sleep infinity
+        ```
+   * To find out the container ID, use
+        ```
+        sudo docker ps 
+        ```
+   * To interact with the terminal into the Docker container, use
+        ```
+        sudo docker exec -it <CONTAINER_ID> /bin/bash 
+        ```
+     > You can switch to the host system via 
+        ```
+        exit
+        ```                                                                                                                                                                                                                                                                                          
+   * To stop the Docker container, use
+        ```
+        sudo docker stop <CONTAINER_ID>
+        ```
+
 
 ## Acknowledgments
 
 This repo is based on
 * [trt_pose](https://github.com/NVIDIA-AI-IOT/trt_pose)
+* [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt)
 * [CrowdPose](https://github.com/Jeff-sjtu/CrowdPose)
 
 Thanks to the original authors for their work!
