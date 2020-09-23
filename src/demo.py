@@ -49,8 +49,8 @@ def initialize_video_writer():
     print('initialize video capture')
     capture = cv2.VideoCapture(args.path + args.video)
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-    frame_width = 640#int(capture.get(3))
-    frame_height = 360#int(capture.get(4))
+    frame_width = int(capture.get(3) * 0.5)
+    frame_height = int(capture.get(4) * 0.5)
     frame_size = (frame_width, frame_height)
     print('initialize video writer')
     out_vid = cv2.VideoWriter(args.path + video_name + '_demo.mp4', fourcc, 25, frame_size)
@@ -82,7 +82,7 @@ def process_frames(out_video, cap, frame_size):
     t = time.time()
 
     while cap.isOpened():
-        if i % 4 is not 3:
+        if i % 4 is 3:
             ret, frame = cap.read()
 
             if not ret:
@@ -92,7 +92,7 @@ def process_frames(out_video, cap, frame_size):
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 break
 
-            frame_resized = cv2.resize(frame, frame_size)
+            frame_resized = cv2.resize(frame, frame_size, interpolation=cv2.INTER_LINEAR)
             img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR)
             execute(img, frame_resized, t, out_video, i)
         i += 1
