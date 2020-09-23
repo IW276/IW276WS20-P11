@@ -1,1 +1,1 @@
-sudo docker run --runtime nvidia -v ~/Documents/Autonome_Systeme_Labor/trt_pose_Docker/videos/:/videos/ trt_pose_image /bin/bash -c 'cd IW276WS20-P11/src && python3 demo_old.py --path /videos/ --video video.mp4'
+sudo docker run --runtime nvidia -v ~/Documents/Autonome_Systeme_Labor/trt_pose_Docker/videos/:/videos/ trt_pose_image /bin/bash -c 'cd IW276WS20-P11/src && python3 demo.py --path /videos/ --video video.mp4'
