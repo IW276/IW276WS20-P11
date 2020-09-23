@@ -49,13 +49,14 @@ def initialize_video_writer():
     print('initialize video capture')
     capture = cv2.VideoCapture(args.path + args.video)
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-    frame_width = int(capture.get(3))
-    frame_height = int(capture.get(4))
+    frame_width = 640#int(capture.get(3))
+    frame_height = 360#int(capture.get(4))
     frame_size = (frame_width, frame_height)
     print('initialize video writer')
-    out_vid = cv2.VideoWriter(args.path + video_name + '_demo.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
+    out_vid = cv2.VideoWriter(args.path + video_name + '_demo.mp4', fourcc, 25, frame_size)
 
-    return capture, out_vid
+    return capture, out_vid, frame_size
+
 
 def clean_up():
     cv2.destroyAllWindows()
@@ -76,12 +77,12 @@ def execute(image, src, tm, out_vid, counter):
     out_vid.write(src)
 
 
-def process_frames(out_video, cap):
+def process_frames(out_video, cap, frame_size):
     i = 1
     t = time.time()
 
     while cap.isOpened():
-        if i % 2 is not 0:
+        if i % 4 is not 3:
             ret, frame = cap.read()
 
             if not ret:
@@ -91,8 +92,9 @@ def process_frames(out_video, cap):
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 break
 
-            img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
-            execute(img, frame, t, out_video, i)
+            frame_resized = cv2.resize(frame, frame_size)
+            img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR)
+            execute(img, frame_resized, t, out_video, i)
         i += 1
 
 with open(DIR_DATASETS + DATASET, 'r') as f:
@@ -123,8 +125,8 @@ device = torch.device('cuda')
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
-cap, out_video = initialize_video_writer()
-process_frames(out_video, cap)
+cap, out_video, frame_size = initialize_video_writer()
+process_frames(out_video, cap, frame_size)
 
 clean_up()
 print("Process finished")
