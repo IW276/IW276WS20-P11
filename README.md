@@ -57,6 +57,8 @@ You can either install the repository directly or install it via Docker (see poi
 
 Pre-trained models are available at ```pretrained-models```.
 * ``resnet18_crowdpose_224x224_epoch_129.pth`` was trained using the CrowdPose dataset and is based on the resnet model.
+> If you want to continue training the model, see point '[Training](#Training)'.
+
 * ``resnet18_baseline_att_224x224_A_epoch_249.pth`` and ``densenet121_baseline_att_256x256_B_epoch_160.pth`` were pre-trained on the MSCOCO dataset (source: trt_pose).
 
 ## Running
@@ -99,6 +101,21 @@ To run the demo in a Docker container, follow these steps:
         sudo docker stop <CONTAINER_ID>
         ```
 
+## Training
+
+1. Execute the preprocess_coco_person.py in the train folder to adjust the keypoint IDs and links:
+    ```
+    python3 preprocess_coco_person.py
+    ```
+2. Check your dataset has exactly the following 14 keypoints:
+    * Left/Right Shoulder 
+    * Left/Right Elbow
+    * Left/Right Wrist
+    * Left/Right Hip
+    * Left/Right Knee
+    * Left/Right Ankle
+    * Head
+    * Neck
 
 ## Acknowledgments
 
