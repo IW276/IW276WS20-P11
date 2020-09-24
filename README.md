@@ -72,17 +72,18 @@ python3 demo.py --video <video.mp4> --path </videos/>
 To run the demo in a Docker container, follow these steps:
 > We assume you have already installed Docker on your system.
 
-1. Build the docker container via ```docker_build.sh```. The container will be called ```P11_image```.
+1. Build the docker container via ```docker_build.sh```. The container will be called ```p11_image```.
 2. To start the demo directly in the container, use this command:
     ```
-    sudo docker run --runtime nvidia -v ~/Videos/:/videos/ P11_image /bin/bash -c 'cd IW276WS20-P11/src && python3 demo.py --path /videos/ --video <video.mp4>'
+    sudo docker run --runtime nvidia -v ~/Videos/:/videos/ p11_image /bin/bash -c 'cd IW276WS20-P11/src && python3 demo.py --path /videos/ --video <video.mp4>'
     ```
-   > Please replace the video file name in the command.
-                                                                                                                                                                                                                                                     >
+   > Please replace the video file name in the command.                                                                                                                                                                                                                                            
+   > Add -d to the command to run the container in detached mode.                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                     
 3. To start the Docker container with an interactive terminal, follow these steps:
     * Start the Docker container via
         ```
-        sudo docker run --runtime nvidia -d -v ~/Videos/:/videos/ P11_image sleep infinity
+        sudo docker run --runtime nvidia -d -v ~/Videos/:/videos/ p11_image sleep infinity
         ```
    * To find out the container ID, use
         ```

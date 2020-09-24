@@ -18,10 +18,10 @@ from os import path
 DIR_DATASETS = '../datasets/'
 DIR_PRETRAINED_MODELS = '../pretrained-models/'
 
-DATASET = 'human_pose.json'
+DATASET = 'human_pose_new.json'
 
-MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249.pth'
-OPTIMIZED_MODEL_RESNET18 = 'resnet18_baseline_att_224x224_A_epoch_249_trt.pth'
+MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129.pth'
+OPTIMIZED_MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129_trt.pth'
 
 WIDTH = 224
 HEIGHT = 224
