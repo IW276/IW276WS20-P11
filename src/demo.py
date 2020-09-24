@@ -20,8 +20,8 @@ DIR_PRETRAINED_MODELS = '../pretrained-models/'
 
 DATASET = 'human_pose_new.json'
 
-MODEL_RESNET18 = 'epoch2_2020-09-17_21.pth'
-OPTIMIZED_MODEL_RESNET18 = 'epoch2_2020-09-17_21_trt.pth'
+MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129.pth'
+OPTIMIZED_MODEL_RESNET18 = 'resnet18_crowdpose_224x224_epoch_129_trt.pth'
 
 WIDTH = 224
 HEIGHT = 224
@@ -49,13 +49,14 @@ def initialize_video_writer():
     print('initialize video capture')
     capture = cv2.VideoCapture(args.path + args.video)
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-    frame_width = int(capture.get(3))
-    frame_height = int(capture.get(4))
+    frame_width = int(capture.get(3) * 0.5)
+    frame_height = int(capture.get(4) * 0.5)
     frame_size = (frame_width, frame_height)
     print('initialize video writer')
-    out_vid = cv2.VideoWriter(args.path + video_name + '_demo.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
+    out_vid = cv2.VideoWriter(args.path + MODEL_RESNET18 + '_' + video_name + '_demo.mp4', fourcc, 25, frame_size)
 
-    return capture, out_vid
+    return capture, out_vid, frame_size
+
 
 def clean_up():
     cv2.destroyAllWindows()
@@ -63,17 +64,38 @@ def clean_up():
     cap.release()
     print('all released')
 
-def execute(image, src, tm, out_vid):
+
+def execute(image, src, tm, out_vid, counter):
     img_data = preprocess(image)
     cmap, paf = model_trt(img_data)
     cmap, paf = cmap.detach().cpu(), paf.detach().cpu()
     counts, objects, peaks = parse_objects(cmap, paf)
-    fps = 1.0 / (time.time() - tm)
+    fps = counter / (time.time() - tm)
     print("FPS:%f " % fps)
     draw_objects(src, counts, objects, peaks)
-    cv2.putText(src, "FPS: %f" % fps, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
+    cv2.putText(src, "FPS: %f" % fps, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
     out_vid.write(src)
 
+
+def process_frames(out_video, cap, frame_size):
+    i = 1
+    t = time.time()
+
+    while cap.isOpened():
+        if i % 4 is 3:
+            ret, frame = cap.read()
+
+            if not ret:
+                print("End of videofile.")
+                break
+
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                break
+
+            frame_resized = cv2.resize(frame, frame_size, interpolation=cv2.INTER_LINEAR)
+            img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_LINEAR)
+            execute(img, frame_resized, t, out_video, i)
+        i += 1
 
 with open(DIR_DATASETS + DATASET, 'r') as f:
     human_pose = json.load(f)
@@ -103,23 +125,8 @@ device = torch.device('cuda')
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
-cap, out_video = initialize_video_writer()
-
-while cap.isOpened():
-    t = time.time()
-    ret, frame = cap.read()
-
-    if not ret:
-        print("Video load Error.")
-        break
-
-    img = cv2.resize(frame, dsize=(WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
-
-    if cv2.waitKey(25) & 0xFF == ord('q'):
-        break
-
-    execute(img, frame, t, out_video)
-    print('Started execution')
+cap, out_video, frame_size = initialize_video_writer()
+process_frames(out_video, cap, frame_size)
 
 clean_up()
 print("Process finished")
