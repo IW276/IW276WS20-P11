@@ -15,7 +15,7 @@ Short introduction to project assigment.
 * [Prerequisites](#prerequisites)
 * [Pre-trained model](#pre-trained-model)
 * [Running](#running)
-   * [Docker](#Docker)
+* [Docker](#Docker)
 * [Acknowledgments](#acknowledgments)
 
 ## Requirements
