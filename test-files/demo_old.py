@@ -88,6 +88,7 @@ model = trt_pose.models.resnet18_baseline_att(num_parts, 2 * num_links).cuda().e
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 
 if not path.exists(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18):
+    print('Start converting model to trt')
     model.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + MODEL_RESNET18))
     model_trt = torch2trt.torch2trt(model, [data], fp16_mode=True, max_workspace_size=1<<25)
     torch.save(model_trt.state_dict(), DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18)
