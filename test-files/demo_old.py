@@ -53,7 +53,7 @@ def initialize_video_writer():
     frame_height = int(capture.get(4))
     frame_size = (frame_width, frame_height)
     print('initialize video writer')
-    out_vid = cv2.VideoWriter(args.path + video_name + '_demo_old.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
+    out_vid = cv2.VideoWriter(args.path + MODEL_RESNET18 + '_' + video_name + '_demo_old.mp4', fourcc, capture.get(cv2.CAP_PROP_FPS), frame_size)
 
     return capture, out_vid
 

@@ -1,11 +1,19 @@
-# Project-Template for IW276 Autonome Systeme Labor
+# IW276WS20P11: 2D Multi Person Pose Estimation (Jetson Nano)
 
-Short introduction to project assigment.
+In the context of Smart Cities, it is important to be able to estimate and recognize situations in urban space.
+Therefore the video-based action recognition in real time is used in Person Pose Estimation. This project was developed for the Jetson Nano.
 
-<p align="center">
-  Screenshot / GIF <br />
-  Link to Demo Video
-</p>
+Based on the results of [IW276SS20P1](https://github.com/IW276/IW276SS20-P1) we were able to optimize the existing pipeline to process videos in real time (> 15 fps). We used the [CrowdPose](https://github.com/Jeff-sjtu/CrowdPose) data set to train a model in [trt_pose](https://github.com/NVIDIA-AI-IOT/trt_pose) which can estimate the 2D poses of several people from a video stream.
+
+**Result image using the pipeline from [IW276SS20P1](https://github.com/IW276/IW276SS20-P1)** <br />
+![Result image of old pipeline](/result-images/dance_demo_old.jpg)<br />
+
+**Result image using the pipeline from [IW276SS20P1](https://github.com/IW276/IW276SS20-P1)** <br />
+![Result image of optimized pipeline](/result-images/dance_demo_optimized.jpg)<br />
+  
+
+[Link to Demo Video]()
+
 
 > This work was done by Xiahong C., Nadine V. and Melanie W. during the IW276 Autonome Systeme Labor at the Karlsruhe University of Applied Sciences (Hochschule Karlsruhe - Technik und Wirtschaft) in WS 2020 / 2021. 
 
@@ -58,7 +66,6 @@ You can either install the repository directly or install it via Docker (see poi
 Pre-trained models are available at ```pretrained-models```.
 * ``resnet18_crowdpose_224x224_epoch_129.pth`` was trained using the CrowdPose dataset and is based on the resnet model.
 > If you want to continue training the model, see point '[Training](#Training)'.
-
 * ``resnet18_baseline_att_224x224_A_epoch_249.pth`` and ``densenet121_baseline_att_256x256_B_epoch_160.pth`` were pre-trained on the MSCOCO dataset (source: trt_pose).
 
 ## Running
