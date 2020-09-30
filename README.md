@@ -8,7 +8,7 @@ Based on the results of [IW276SS20P1](https://github.com/IW276/IW276SS20-P1) we 
 **Result image using the pipeline from [IW276SS20P1](https://github.com/IW276/IW276SS20-P1)** <br />
 ![Result image of old pipeline](/result-images/dance_demo_old.jpg)<br />
 
-**Result image using the pipeline from [IW276SS20P1](https://github.com/IW276/IW276SS20-P1)** <br />
+**Result image using the optimized pipeline**<br />
 ![Result image of optimized pipeline](/result-images/dance_demo_optimized.jpg)<br />
   
 
