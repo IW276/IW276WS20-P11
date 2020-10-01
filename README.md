@@ -59,7 +59,7 @@ You can either install the repository directly or install it via Docker (see poi
     ``` 
 5. Make sure you have some .mp4 video files in the ~/Videos folder on your system
   > The demo works best with square videos.
-  > You can download example videos [here](https://drive.google.com/drive/folders/1V--ryc-o-DVLaBRe7ET7AeKvQKV8SVm8)     
+  > You can download example videos [here](https://drive.google.com/drive/folders/1V--ryc-o-DVLaBRe7ET7AeKvQKV8SVm8).     
 
     
 ## Pre-trained models
