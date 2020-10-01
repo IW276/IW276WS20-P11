@@ -138,6 +138,14 @@ The example videos are made from
 * [https://www.youtube.com/watch?v=4Ch3MWQG3CE](https://www.youtube.com/watch?v=4Ch3MWQG3CE)
 * [https://www.youtube.com/watch?v=SvldnZ6qMGU&t=54s](https://www.youtube.com/watch?v=SvldnZ6qMGU&t=54s)
 * [https://www.youtube.com/watch?v=EErq1Km6HZE](https://www.youtube.com/watch?v=EErq1Km6HZE)
+* [https://www.pexels.com/video/a-busy-street-on-a-sunny-day-1625973/](https://www.pexels.com/video/a-busy-street-on-a-sunny-day-1625973/)
+* [https://www.pexels.com/video/people-giving-high-fives-1149521/](https://www.pexels.com/video/people-giving-high-fives-1149521/)
+* [https://www.pexels.com/video/a-crowd-of-people-gathered-in-the-city-street-carrying-placard-and-flags-in-protest-3105293/](https://www.pexels.com/video/a-crowd-of-people-gathered-in-the-city-street-carrying-placard-and-flags-in-protest-3105293/)
+* [https://www.pexels.com/video/showing-the-new-workplace-4435249/](https://www.pexels.com/video/showing-the-new-workplace-4435249/)
+* [https://www.pexels.com/video/two-women-crossing-the-street-4873842/](https://www.pexels.com/video/two-women-crossing-the-street-4873842/)
+* [https://pixabay.com/videos/people-alley-street-ukraine-bike-39836/](https://pixabay.com/videos/people-alley-street-ukraine-bike-39836/)
+* [https://pixabay.com/videos/people-commerce-shop-busy-mall-6387/](https://pixabay.com/videos/people-commerce-shop-busy-mall-6387/)
+
 
 Thanks to the original authors for their work!
 
