@@ -132,6 +132,12 @@ This repo is based on
 * [trt_pose](https://github.com/NVIDIA-AI-IOT/trt_pose)
 * [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt)
 * [CrowdPose](https://github.com/Jeff-sjtu/CrowdPose)
+* [IW276SS20-P1](https://github.com/IW276/IW276SS20-P1)
+
+The example videos are made from
+* [https://www.youtube.com/watch?v=4Ch3MWQG3CE](https://www.youtube.com/watch?v=4Ch3MWQG3CE)
+* [https://www.youtube.com/watch?v=SvldnZ6qMGU&t=54s](https://www.youtube.com/watch?v=SvldnZ6qMGU&t=54s)
+* [https://www.youtube.com/watch?v=EErq1Km6HZE](https://www.youtube.com/watch?v=EErq1Km6HZE)
 
 Thanks to the original authors for their work!
 
