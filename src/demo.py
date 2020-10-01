@@ -97,11 +97,13 @@ def process_frames(out_video, cap, frame_size):
             execute(img, frame_resized, t, out_video, i)
         i += 1
 
+#loads the JSON file which describes the human pose task
 with open(DIR_DATASETS + DATASET, 'r') as f:
     human_pose = json.load(f)
 
 topology = trt_pose.coco.coco_category_to_topology(human_pose)
 
+#loads the model
 num_parts = len(human_pose['keypoints'])
 num_links = len(human_pose['skeleton'])
 
@@ -109,6 +111,7 @@ model = trt_pose.models.resnet18_baseline_att(num_parts, 2 * num_links).cuda().e
 
 data = torch.zeros((1, 3, HEIGHT, WIDTH)).cuda()
 
+#convert the model from PyTorch to TensorRT and save it in the pretrained-models folder
 if not path.exists(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18):
     print('Start converting model to trt')
     model.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + MODEL_RESNET18))
@@ -116,6 +119,7 @@ if not path.exists(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18):
     torch.save(model_trt.state_dict(), DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18)
     print('Model optimized')
 
+#loads the saved TensorRT model
 model_trt = TRTModule()
 model_trt.load_state_dict(torch.load(DIR_PRETRAINED_MODELS + OPTIMIZED_MODEL_RESNET18))
 
@@ -123,9 +127,11 @@ mean = torch.Tensor([0.485, 0.456, 0.406]).cuda()
 std = torch.Tensor([0.229, 0.224, 0.225]).cuda()
 device = torch.device('cuda')
 
+#defines to classes that will be used to parse the objects from the neural network and to draw the parsed object on frames
 parse_objects = ParseObjects(topology)
 draw_objects = DrawObjects(topology)
 
+#initializes the video capturing and writing and processes the frames
 cap, out_video, frame_size = initialize_video_writer()
 process_frames(out_video, cap, frame_size)
 
