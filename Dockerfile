@@ -1,5 +1,5 @@
 FROM nvcr.io/nvidia/l4t-pytorch:r32.4.3-pth1.6-py3
-RUN echo "Build a Docker container for the trt_pose project based on L4T Pytorch"
+RUN echo "Build a Docker container for the IW276WS20-P11 project based on L4T Pytorch"
 RUN nvcc --version
 
 # needed for accessing jetpack.  This is for 4.4
