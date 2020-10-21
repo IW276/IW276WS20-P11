@@ -1,7 +1,7 @@
 {
     "train_dataset": {
-        "images_dir": "/content/drive/My Drive/AutonomeSystemeLabor/images/",
-        "annotations_file": "/content/drive/My Drive/AutonomeSystemeLabor/crowdpose_train.json",
+        "images_dir": "#Imagedirectory",
+        "annotations_file": "#Path of annotationfile",
         "category_name": "person",
         "image_shape": [224, 224],
         "target_shape": [56, 56],
@@ -20,9 +20,9 @@
         "saturation": 0.05,
         "hue": 0.01
     },
-    "test_dataset": {
-        "images_dir": "/content/drive/My Drive/AutonomeSystemeLabor/images/",
-        "annotations_file": "/content/drive/My Drive/AutonomeSystemeLabor/crowdpose_test.json",
+    "test_dataset": {        
+        "images_dir": "#Imagedirectory",
+        "annotations_file": "#Path of annotationfile",
         "category_name": "person",
         "image_shape": [224, 224],
         "target_shape": [56, 56],
