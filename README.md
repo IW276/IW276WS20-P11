@@ -126,7 +126,7 @@ To run the demo in a Docker container, follow these steps:
     * Head
     * Neck
 3. Adjust the config file resnet18CrowdPose.json with your own location of the dataset.
-4. Start your training with the skript train.py from [trt_pose](https://github.com/NVIDIA-AI-IOT/trt_pose).
+4. Start your training with the skript train.py.
 ## Acknowledgments
 
 This repo is based on
