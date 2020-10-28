@@ -59,6 +59,7 @@ You can either install the repository directly or install it via Docker (see poi
     ``` 
 5. Make sure you have some .mp4 video files in the ~/Videos folder on your system
   > The demo works best with square videos.
+  > You can download example videos [here](https://drive.google.com/drive/folders/1V--ryc-o-DVLaBRe7ET7AeKvQKV8SVm8).     
 
     
 ## Pre-trained models
@@ -124,13 +125,28 @@ To run the demo in a Docker container, follow these steps:
     * Left/Right Ankle
     * Head
     * Neck
-
+3. Adjust the config file resnet18CrowdPose.json with your own location of the dataset.
+4. Start your training with the skript train.py from [trt_pose](https://github.com/NVIDIA-AI-IOT/trt_pose).
 ## Acknowledgments
 
 This repo is based on
 * [trt_pose](https://github.com/NVIDIA-AI-IOT/trt_pose)
 * [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt)
 * [CrowdPose](https://github.com/Jeff-sjtu/CrowdPose)
+* [IW276SS20-P1](https://github.com/IW276/IW276SS20-P1)
+
+The example videos are made from
+* [https://www.youtube.com/watch?v=4Ch3MWQG3CE](https://www.youtube.com/watch?v=4Ch3MWQG3CE)
+* [https://www.youtube.com/watch?v=SvldnZ6qMGU&t=54s](https://www.youtube.com/watch?v=SvldnZ6qMGU&t=54s)
+* [https://www.youtube.com/watch?v=EErq1Km6HZE](https://www.youtube.com/watch?v=EErq1Km6HZE)
+* [https://www.pexels.com/video/a-busy-street-on-a-sunny-day-1625973/](https://www.pexels.com/video/a-busy-street-on-a-sunny-day-1625973/)
+* [https://www.pexels.com/video/people-giving-high-fives-1149521/](https://www.pexels.com/video/people-giving-high-fives-1149521/)
+* [https://www.pexels.com/video/a-crowd-of-people-gathered-in-the-city-street-carrying-placard-and-flags-in-protest-3105293/](https://www.pexels.com/video/a-crowd-of-people-gathered-in-the-city-street-carrying-placard-and-flags-in-protest-3105293/)
+* [https://www.pexels.com/video/showing-the-new-workplace-4435249/](https://www.pexels.com/video/showing-the-new-workplace-4435249/)
+* [https://www.pexels.com/video/two-women-crossing-the-street-4873842/](https://www.pexels.com/video/two-women-crossing-the-street-4873842/)
+* [https://pixabay.com/videos/people-alley-street-ukraine-bike-39836/](https://pixabay.com/videos/people-alley-street-ukraine-bike-39836/)
+* [https://pixabay.com/videos/people-commerce-shop-busy-mall-6387/](https://pixabay.com/videos/people-commerce-shop-busy-mall-6387/)
+
 
 Thanks to the original authors for their work!
 
